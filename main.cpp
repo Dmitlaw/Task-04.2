@@ -29,12 +29,18 @@ public:
     int getFlat() {
         return this->flat;
     }
+
+    static void sort(Address** arr, int n) {
+        std::stable_sort(arr, arr + n, [](Address* lhs, Address* rhs) {
+            return lhs->getCity() < rhs->getCity();
+        });
+    }
+
 };
 
 int main() {
 
     int n = 0;
-    Address** arr = new Address*[n];
 
     std::ifstream fin("in.txt");
     if (!fin) {
@@ -43,6 +49,7 @@ int main() {
     }
 
     fin >> n;
+    Address** arr = new Address*[n];
     fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     std::cout << "Текст в файле in.txt: " << std::endl;
@@ -67,9 +74,7 @@ int main() {
     }
     fin.close();
 
-    std::stable_sort(arr, arr + n, [](Address* lhs, Address* rhs) {
-    return lhs->getCity() < rhs->getCity();
-});
+    Address::sort(arr, n);
 
     std::ofstream out("out.txt");
     if (!out) {
@@ -87,10 +92,14 @@ int main() {
 
     out.close();
 
-    std::ifstream fin_out("out.txt");
+    for (int i = 0; i < n; ++i) {
+        delete arr[i];
+    }
+    delete[] arr;
 
     std::cout << std::endl;
     std::cout << "Текст в файле out.txt: " << std::endl;
+    std::ifstream fin_out("out.txt");
     std::cout << fin_out.rdbuf();
     fin_out.close();
 
