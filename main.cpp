@@ -79,6 +79,10 @@ int main() {
     std::ofstream out("out.txt");
     if (!out) {
         std::cerr << "Не удалось открыть out.txt для записи\n";
+        for (int i = 0; i < n; ++i) {
+            delete arr[i];
+        }
+        delete[] arr;
         return 1;
     }
 
